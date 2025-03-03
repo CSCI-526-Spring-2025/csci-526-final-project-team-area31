@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movementInput;
     public BatteryManager1 bm;
+    public Health health;
     private Vector3 initialPosition;
     public TextMeshProUGUI notificationText;
     private bool isPromptedToReturn = false;
@@ -65,6 +66,10 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(other.gameObject);
             bm.batteryCount++;
+        }
+        else if (other.gameObject.CompareTag("Trap"))
+        {
+            health.health -= 30;
         }
     }
 
