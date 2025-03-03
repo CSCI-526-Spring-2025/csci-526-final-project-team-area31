@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
+using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;  // Adjust speed in Inspector
@@ -70,9 +71,16 @@ public class PlayerMovement : MonoBehaviour
     void FinishGame()
     {
         // Show a message, stop player movement, or load a new scene
-        notificationText.text = "You collected all the batteries! You win!";
+        notificationText.text = "You collected all the batteries! Loading next level.....";
+        StartCoroutine(WaitAndExecute());
 
-        // Optionally, load a different scene (e.g., a "Game Over" or "You Win" scene)
-        // SceneManager.LoadScene("WinScene");  // Replace with your win scene name
+       // SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+    }
+
+    IEnumerator WaitAndExecute()
+    {
+        yield return new WaitForSeconds(3f);
+        Debug.Log("3 seconds"); 
+        SceneManager.LoadScene("MazeScene_Level2"); 
     }
 }
