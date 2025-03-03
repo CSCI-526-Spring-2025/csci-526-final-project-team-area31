@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class BatteryManager : MonoBehaviour
 {
     public static BatteryManager Instance;
@@ -51,7 +51,6 @@ public class BatteryManager : MonoBehaviour
         if (batteryCount >= batteriesNeededToWin)
         {
             Debug.Log("You collected enough batteries! You win!");
-            // Add UI message or level transition here
         }
         else
         {
