@@ -7,8 +7,8 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;  // Adjust speed in Inspector
     private Rigidbody2D rb;
     private Vector2 movementInput;
-    public BatteryManager1 bm;
     public Health health;
+    public BatteryManager1 bm;
     private Vector3 initialPosition;
     public TextMeshProUGUI notificationText;
     private bool isPromptedToReturn = false;
