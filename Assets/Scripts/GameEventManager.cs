@@ -29,7 +29,7 @@ public class GameEventManager : MonoBehaviour
 
     public void PauseGame(){
         pauseMenuUI.SetActive(true);
-        tutorialUI.SetActive(true);
+        //tutorialUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
     }
@@ -37,7 +37,7 @@ public class GameEventManager : MonoBehaviour
     public void ResumeGame()
     {
         pauseMenuUI.SetActive(false);
-        tutorialUI.SetActive(false);
+        //tutorialUI.SetActive(false);
         Time.timeScale = 1f; 
         isPaused = false;
     }

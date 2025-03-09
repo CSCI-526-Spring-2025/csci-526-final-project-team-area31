@@ -8,6 +8,7 @@ public class Health : MonoBehaviour
     public int health = 100;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI deathText;
+    public GameObject restartButton;
     void Start()
     {
         healthText.color = Color.white;
@@ -23,6 +24,11 @@ public class Health : MonoBehaviour
         {
             deathText.text = "YOU DIED! ";
             Debug.Log("Health is: " + health); // Remove the battery item after pickup
+
+            if (restartButton != null)
+            {
+                restartButton.SetActive(true); // Show the restart button
+            }
         }
     }
 

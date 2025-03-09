@@ -11,7 +11,7 @@ public class MonsterCollisionHandler : MonoBehaviour
         {
             gameOverPanel.SetActive(false);  // Hide at start
         }
-    }
+        }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -25,9 +25,9 @@ public class MonsterCollisionHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player1"))
         {
-            TriggerGameOver();
+                TriggerGameOver();
+            }
         }
-    }
 
     void TriggerGameOver()
     {

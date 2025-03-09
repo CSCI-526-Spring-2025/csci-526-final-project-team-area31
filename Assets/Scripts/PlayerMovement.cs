@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -13,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI notificationText;
     private bool isPromptedToReturn = false;
     private float notificationTimer = 0f;  // Timer to control the duration of the notification
+    public Image damageOverlay;
+    public float flashDuration = 0.2f;
 
     void Start()
     {
@@ -30,12 +33,12 @@ public class PlayerMovement : MonoBehaviour
         movementInput = new Vector2(moveX, moveY).normalized;
 
         // Show the notification to return when the player has 3 batteries
-        if (bm.batteryCount >= 3 && !isPromptedToReturn)
-        {
-            notificationText.text = "Return to the starting point to win!";
-            notificationTimer = 5f;  // Start the timer for 5 seconds
-            isPromptedToReturn = true;  // Set flag to true so we don't repeat the message
-        }
+        //if (bm.batteryCount >= 3 && !isPromptedToReturn)
+        //{
+        //    notificationText.text = "Return to the starting point to win!";
+        //    notificationTimer = 5f;  // Start the timer for 5 seconds
+        //    isPromptedToReturn = true;  // Set flag to true so we don't repeat the message
+        //}
 
         // Countdown for the notification
         if (notificationTimer > 0f)
@@ -70,6 +73,12 @@ public class PlayerMovement : MonoBehaviour
         else if (other.gameObject.CompareTag("Trap"))
         {
             health.health -= 30;
+            StartCoroutine(FlashRed());
+        }
+        else if (other.gameObject.CompareTag("Monster"))
+        {
+            health.health -= 30;
+            StartCoroutine(FlashRed());
         }
     }
 
@@ -87,5 +96,15 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(3f);
         Debug.Log("3 seconds"); 
         SceneManager.LoadScene("MazeScene_Level2"); 
+    }
+
+    IEnumerator FlashRed()
+    {
+        if (damageOverlay != null)
+        {
+            damageOverlay.color = new Color(1, 0, 0, 0.5f); // Red overlay (50% opacity)
+            yield return new WaitForSeconds(flashDuration);
+            damageOverlay.color = new Color(1, 0, 0, 0); // Fade back to transparent
+        }
     }
 }
