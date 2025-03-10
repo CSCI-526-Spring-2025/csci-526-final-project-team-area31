@@ -2,16 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
+using UnityEngine.Networking;
 
 public class GameEventManager : MonoBehaviour
 {
+    [SerializeField]
+    private string firebaseURL = "https://area31-9329c-default-rtdb.firebaseio.com/";
+
+    private string sessionID;
 
     private bool isPaused = false;
     public GameObject pauseMenuUI; 
     public GameObject tutorialUI;
     void Start()
     {
-        
+        // Ensure each browser session has a single, persistent session ID
+        if (!PlayerPrefs.HasKey("SessionID"))
+        {
+            string newSessionId = System.Guid.NewGuid().ToString();
+            PlayerPrefs.SetString("SessionID", newSessionId);
+        }
     }
 
     // Update is called once per frame
@@ -43,7 +54,37 @@ public class GameEventManager : MonoBehaviour
     }
     public void RestartGame()
     {
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
+
+        StartCoroutine(SendRestartEvent());
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+    }
+
+    IEnumerator SendRestartEvent()
+    {
+        string sessionId = PlayerPrefs.GetString("SessionID");
+
+        // Increment restart count in Firebase under this session ID
+        string firebaseURL = "https://area31-9329c-default-rtdb.firebaseio.com/gameRestarts/" + sessionId + ".json";
+
+        string jsonData = "{\"timestamp\":\"" + System.DateTime.UtcNow.ToString("o") + "\"}";
+
+        using (UnityWebRequest uwr = new UnityWebRequest(firebaseURL, "POST"))
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            uwr.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.SetRequestHeader("Content-Type", "application/json");
+
+            yield return uwr.SendWebRequest();
+
+            if (uwr.result != UnityWebRequest.Result.Success)
+                Debug.LogError("Firebase Error: " + uwr.error);
+            else
+                Debug.Log("Restart Event Logged Successfully.");
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

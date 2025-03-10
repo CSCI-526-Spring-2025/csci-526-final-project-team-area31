@@ -5,6 +5,6 @@ public class MainSceneManager : MonoBehaviour
 {
     public void LoadGameScene()
     {
-        SceneManager.LoadScene("MazeScene"); 
+        SceneManager.LoadScene("MazeScene_new"); 
     }
 }
