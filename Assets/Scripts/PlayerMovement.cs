@@ -69,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(other.gameObject);
             bm.batteryCount++;
+            bm.recharge_battery();
         }
         else if (other.gameObject.CompareTag("Trap"))
         {

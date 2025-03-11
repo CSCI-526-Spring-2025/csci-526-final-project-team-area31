@@ -13,9 +13,10 @@ public class FlashlightBattery : MonoBehaviour
     public float maxBattery = 100f;  // Maximum battery life
     public float batteryLife;  // Current battery life
     public float drainRate = 0.5f;  // Battery drain per second
+    public float offRechargeRate = 0.3f;
     public float minIntensity = 0.1f;  // Minimum light intensity
     public float maxIntensity = 0.5f;  // Max brightness
-    private bool isInBatteryRoom = false;
+    private bool isInBatteryRoom = true;
     private bool isFlashlightOn = true;
 
     void Start()
@@ -39,17 +40,32 @@ public class FlashlightBattery : MonoBehaviour
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
             flashlight.intensity = intensity;
         }
-        else if (batteryLife <= 0)
+
+        else if (!isFlashlightOn && !isInBatteryRoom){
+            batteryLife = Mathf.Clamp(batteryLife + offRechargeRate , 0, maxBattery);
+            float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
+            flashlight.intensity = intensity;
+        }
+
+        if (batteryLife <= 0)
         {
             flashlight.intensity = 0.3f;
             flashlight.pointLightOuterRadius =2f;
             //flashlight.enabled = false;  // Auto turn off when battery is empty
         }
+        else{
+            
+            flashlight.pointLightOuterRadius =4f;
+        }
+        
     }
 
     // Function to recharge the battery
     public void RechargeBattery(float amount)
     {
+        if (batteryLife <= 0){
+            batteryLife = 0;
+        }
         batteryLife = Mathf.Clamp(batteryLife + amount, 0, maxBattery);
         flashlight.enabled = true; // Turn on again if recharged
         flashlight.pointLightOuterRadius = 4.0f;
@@ -57,7 +73,7 @@ public class FlashlightBattery : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-          Debug.Log("Current in the tutorial Room");
+        // Debug.Log("Current in the tutorial Room");
         if (other.CompareTag("Tutorial")) 
         {
             Debug.Log("Current in the tutorial Room");

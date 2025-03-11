@@ -7,7 +7,7 @@ public class BatteryManager1 : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public int batteryCount;
     public TextMeshProUGUI batteryText;
-    public float rechargeAmount = 30f;
+    public float rechargeAmount = 80f;
     void Start()
     {
         batteryText.color = Color.white;
@@ -21,24 +21,39 @@ public class BatteryManager1 : MonoBehaviour
       
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Battery"))
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Battery"))
+    //     {
+    //         //Destroy(other.gameObject);
+    //         Debug.Log("user hit battery");
+    //         batteryCount++;
+    //         FlashlightBattery flashlight = other.GetComponentInChildren<FlashlightBattery>();
+    //         if (flashlight != null)
+    //         {
+    //             Debug.Log("FlashlightBattery script found! Recharging...");
+    //             flashlight.RechargeBattery(rechargeAmount);
+    //             Debug.Log("Battery recharged by " + rechargeAmount + ". Current battery: " + flashlight.batteryLife);
+    //             //Destroy(gameObject);  // Remove the battery item after pickup
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("FlashlightBattery script NOT found on player!");
+    //         }
+    //     }
+    // }
+    public void recharge_battery(){
+         FlashlightBattery flashlight = GameObject.FindObjectOfType<FlashlightBattery>();
+        if (flashlight != null)
         {
-            //Destroy(other.gameObject);
-            batteryCount++;
-            FlashlightBattery flashlight = other.GetComponentInChildren<FlashlightBattery>();
-            if (flashlight != null)
-            {
-                Debug.Log("FlashlightBattery script found! Recharging...");
-                flashlight.RechargeBattery(rechargeAmount);
-                Debug.Log("Battery recharged by " + rechargeAmount + ". Current battery: " + flashlight.batteryLife);
-                //Destroy(gameObject);  // Remove the battery item after pickup
-            }
-            else
-            {
-                Debug.LogError("FlashlightBattery script NOT found on player!");
-            }
+            Debug.Log("FlashlightBattery script found! Recharging...");
+            flashlight.RechargeBattery(rechargeAmount);
+            Debug.Log("Battery recharged by " + rechargeAmount + ". Current battery: " + flashlight.batteryLife);
+            //Destroy(gameObject);  // Remove the battery item after pickup
+        }
+        else
+        {
+            Debug.LogError("FlashlightBattery script NOT found on player!");
         }
     }
 }
