@@ -80,6 +80,11 @@ public class PlayerMovement : MonoBehaviour
             health.health -= 30;
             StartCoroutine(FlashRed());
         }
+        else if (other.gameObject.CompareTag("HealthReset"))
+        {
+            health.health = 100;
+            bm.batteryCount = 0;
+        }
     }
 
     void FinishGame()

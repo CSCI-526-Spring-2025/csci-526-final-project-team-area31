@@ -9,6 +9,7 @@ TagManager:
   - Trap
   - Tutorial
   - Monster
+  - HealthReset
   layers:
   - Default
   - TransparentFX
