@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private float notificationTimer = 0f;  // Timer to control the duration of the notification
     public Image damageOverlay;
     public float flashDuration = 0.2f;
+    private bool isDead = false;
 
     void Start()
     {
@@ -26,6 +27,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (health.health <= 0)
+        {
+            isDead = true;
+            rb.linearVelocity = Vector2.zero; // Stop the player immediately
+            return;
+        }
         // Get movement input from Arrow Keys or WASD
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
@@ -59,12 +66,15 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
         // Apply movement using Rigidbody2D to obey physics
         rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, movementInput * moveSpeed, Time.fixedDeltaTime * 10);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (isDead) return;
+
         if (other.gameObject.CompareTag("Battery"))
         {
             Destroy(other.gameObject);
@@ -75,11 +85,13 @@ public class PlayerMovement : MonoBehaviour
         {
             health.health -= 30;
             StartCoroutine(FlashRed());
+            CheckPlayerDeath();
         }
         else if (other.gameObject.CompareTag("Monster"))
         {
             health.health -= 30;
             StartCoroutine(FlashRed());
+            CheckPlayerDeath();
         }
     }
 
@@ -108,4 +120,15 @@ public class PlayerMovement : MonoBehaviour
             damageOverlay.color = new Color(1, 0, 0, 0); // Fade back to transparent
         }
     }
+
+    void CheckPlayerDeath()
+    {
+        if (health.health <= 0)
+        {
+            isDead = true;
+            rb.linearVelocity = Vector2.zero; // Stop movement immediately
+            //notificationText.text = "YOU DIED!"; // Show death message
+        }
+    }
+
 }

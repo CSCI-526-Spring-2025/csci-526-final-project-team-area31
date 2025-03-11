@@ -57,17 +57,32 @@ public class FlashlightBattery : MonoBehaviour
             UpdateBatteryUI();
         }
 
+        //if (batteryLife <= 0)
+        //{
+        //    flashlight.intensity = 0.3f;
+        //    flashlight.pointLightOuterRadius =2f;
+        //    //flashlight.enabled = false;  // Auto turn off when battery is empty
+        //}
+        //else{
+            
+        //    flashlight.pointLightOuterRadius =120f;
+        //}
+
         if (batteryLife <= 0)
         {
-            flashlight.intensity = 0.3f;
-            flashlight.pointLightOuterRadius =2f;
-            //flashlight.enabled = false;  // Auto turn off when battery is empty
+            flashlight.intensity = 0.3f;  // Dimmed intensity
+            flashlight.pointLightOuterRadius = 2f; // Small radius when battery is empty
+            flashlight.pointLightInnerAngle = 80f;
+            flashlight.pointLightOuterAngle = 120f;
         }
-        else{
-            
-            flashlight.pointLightOuterRadius =4f;
+        else
+        {
+            //flashlight.intensity = 0.5f; // Regular intensity
+            flashlight.pointLightOuterRadius = 24.11164f; // Default radius
+            flashlight.pointLightInnerAngle = 80f;
+            flashlight.pointLightOuterAngle = 120f;
         }
-        
+
     }
 
     // Function to recharge the battery
