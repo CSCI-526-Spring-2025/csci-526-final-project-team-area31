@@ -6,6 +6,7 @@
 //}
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class FlashlightBattery : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class FlashlightBattery : MonoBehaviour
     public float maxIntensity = 0.5f;  // Max brightness
     private bool isInBatteryRoom = false;
     private bool isFlashlightOn = true;
+    public Image BatteryBar;
+    public float Width, Height;
+
+    [SerializeField]
+    private RectTransform battery_;
 
     void Start()
     {
@@ -36,6 +42,7 @@ public class FlashlightBattery : MonoBehaviour
         if (isFlashlightOn && batteryLife > 0 && !isInBatteryRoom)
         {
             batteryLife -= drainRate * Time.deltaTime;
+            UpdateBatteryUI();
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
             flashlight.intensity = intensity;
         }
@@ -53,17 +60,19 @@ public class FlashlightBattery : MonoBehaviour
         batteryLife = Mathf.Clamp(batteryLife + amount, 0, maxBattery);
         flashlight.enabled = true; // Turn on again if recharged
         flashlight.pointLightOuterRadius = 4.0f;
+        UpdateBatteryUI();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-          Debug.Log("Current in the tutorial Room");
+          Debug.Log("Current in the tutorial Room sdsd");
         if (other.CompareTag("Tutorial")) 
         {
             Debug.Log("Current in the tutorial Room");
             isInBatteryRoom = true;
             flashlight.intensity = 1.0f;
             batteryLife = maxBattery; // Reset to full battery instantly
+            UpdateBatteryUI();
         }
     }
 
@@ -73,6 +82,13 @@ public class FlashlightBattery : MonoBehaviour
         {
             isInBatteryRoom = false;
         }
+    }
+
+    void UpdateBatteryUI()
+    {
+        float newWidth = (batteryLife / maxBattery) * Width;
+        
+        battery_.sizeDelta = new Vector2(newWidth, Height);
     }
 
 }
