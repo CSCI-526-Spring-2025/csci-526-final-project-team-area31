@@ -87,6 +87,13 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(FlashRed());
             CheckPlayerDeath();
         }
+        else if (other.gameObject.CompareTag("Health")){
+            if(health.health<100){
+                Destroy(other.gameObject);
+                health.health =  ((health.health+50) < 100) ? health.health+50 : 100;
+                StartCoroutine(FlashGreen());
+            }
+        }
         else if (other.gameObject.CompareTag("Monster"))
         {
             health.health -= 30;
@@ -118,6 +125,16 @@ public class PlayerMovement : MonoBehaviour
             damageOverlay.color = new Color(1, 0, 0, 0.5f); // Red overlay (50% opacity)
             yield return new WaitForSeconds(flashDuration);
             damageOverlay.color = new Color(1, 0, 0, 0); // Fade back to transparent
+        }
+    }
+
+    IEnumerator FlashGreen()
+    {
+        if (damageOverlay != null)
+        {
+            damageOverlay.color = new Color(0, 1, 0, 0.5f); // Green overlay (50% opacity)
+            yield return new WaitForSeconds(flashDuration);
+            damageOverlay.color = new Color(0, 1, 0, 0); // Fade back to transparent
         }
     }
 
