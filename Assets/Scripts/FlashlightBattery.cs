@@ -6,6 +6,7 @@
 //}
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class FlashlightBattery : MonoBehaviour
 {
@@ -18,6 +19,13 @@ public class FlashlightBattery : MonoBehaviour
     public float maxIntensity = 0.5f;  // Max brightness
     private bool isInBatteryRoom = true;
     private bool isFlashlightOn = true;
+
+    //BatteryBar
+    public Image BatteryBar;
+    public float Width, Height;
+
+    [SerializeField]
+    private RectTransform battery_;
 
     void Start()
     {
@@ -39,12 +47,14 @@ public class FlashlightBattery : MonoBehaviour
             batteryLife -= drainRate * Time.deltaTime;
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
             flashlight.intensity = intensity;
+            UpdateBatteryUI();
         }
 
         else if (!isFlashlightOn && !isInBatteryRoom){
             batteryLife = Mathf.Clamp(batteryLife + offRechargeRate , 0, maxBattery);
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
             flashlight.intensity = intensity;
+            UpdateBatteryUI();
         }
 
         if (batteryLife <= 0)
@@ -69,6 +79,7 @@ public class FlashlightBattery : MonoBehaviour
         batteryLife = Mathf.Clamp(batteryLife + amount, 0, maxBattery);
         flashlight.enabled = true; // Turn on again if recharged
         flashlight.pointLightOuterRadius = 4.0f;
+        UpdateBatteryUI();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -80,6 +91,7 @@ public class FlashlightBattery : MonoBehaviour
             isInBatteryRoom = true;
             flashlight.intensity = 1.0f;
             batteryLife = maxBattery; // Reset to full battery instantly
+            UpdateBatteryUI();
         }
     }
 
@@ -89,6 +101,12 @@ public class FlashlightBattery : MonoBehaviour
         {
             isInBatteryRoom = false;
         }
+    }
+    void UpdateBatteryUI()
+    {
+        float newWidth = (batteryLife / maxBattery) * Width;
+
+        battery_.sizeDelta = new Vector2(newWidth, Height);
     }
 
 }

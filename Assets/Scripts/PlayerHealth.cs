@@ -9,6 +9,14 @@ public class Health : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI deathText;
     public GameObject restartButton;
+
+    // HealthBar
+    public float MaxHealth = 100;
+    public Image healthBar;
+    public float Width, Height;
+    [SerializeField]
+    private RectTransform health_;
+
     void Start()
     {
         healthText.color = Color.white;
@@ -20,6 +28,7 @@ public class Health : MonoBehaviour
     void Update()
     {
         healthText.text = "Health: " + health.ToString();
+        UpdateHealthUI();
         if (health <= 0)
         {
             deathText.text = "YOU DIED! ";
@@ -32,5 +41,11 @@ public class Health : MonoBehaviour
         }
     }
 
- 
+    void UpdateHealthUI()
+    {
+        float newWidth = (health / MaxHealth) * Width;
+        
+        health_.sizeDelta = new Vector2(newWidth, Height);
+    }
+
 }
