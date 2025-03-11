@@ -4,7 +4,8 @@ using System.Collections;
 public class TutorialScript : MonoBehaviour
 {
     public GameObject tutorialCanvas;
-
+    private BatteryManager1 batteryManager1;
+    private Health playerHealth;
     void Start()
     {
         //StartCoroutine(ShowTutorial());
@@ -12,10 +13,10 @@ public class TutorialScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.CompareTag("Player1")) // Make sure the player has the "Player" tag
+        if (other.CompareTag("Player1")) 
         {
             Debug.Log("player is in tutorail so turn on the UI");
-            tutorialCanvas.SetActive(true); // Show tutorial UI when entering the room
+            tutorialCanvas.SetActive(true); 
         }
     }
 
@@ -23,7 +24,11 @@ public class TutorialScript : MonoBehaviour
     {
         if (other.CompareTag("Player1"))
         {
-            tutorialCanvas.SetActive(false); // Hide tutorial UI when leaving the room
+            playerHealth  = GameObject.FindObjectOfType<Health>();
+            batteryManager1  = GameObject.FindObjectOfType<BatteryManager1>();
+            playerHealth.health = 100;
+            batteryManager1.batteryCount = 0;
+            tutorialCanvas.SetActive(false); 
         }
     }
     // IEnumerator ShowTutorial()

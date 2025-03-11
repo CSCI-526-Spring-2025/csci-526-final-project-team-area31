@@ -1,11 +1,32 @@
 using UnityEngine;
+using System.Collections;
+
 public class DoorOpener : MonoBehaviour {
-    public int battery_limit = 1;
-    BatteryManager1 batteryManager1;
-    void Update(){
+    public int battery_limit;
+    public GameObject nextLevelUI;
+    public GameObject nextLevelGroundUI;
+    private BatteryManager1 batteryManager1;
+    private bool doorOpened = false;
+
+    void Start() {
         batteryManager1 = GameObject.FindObjectOfType<BatteryManager1>();
-        if (batteryManager1.batteryCount >= battery_limit){
-            Destroy(gameObject);
+        nextLevelUI.SetActive(false); // Ensure it's inactive at the start
+    }
+
+    void Update() {
+        if (!doorOpened && batteryManager1.batteryCount >= battery_limit) {
+            doorOpened = true;
+            nextLevelGroundUI.SetActive(true);
+            StartCoroutine(ShowNextLevel());
         }
     }
+
+    IEnumerator ShowNextLevel() {
+        nextLevelUI.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        nextLevelUI.SetActive(false);
+        
+        Destroy(gameObject); // Destroy AFTER coroutine finishes
+    }
+
 }
