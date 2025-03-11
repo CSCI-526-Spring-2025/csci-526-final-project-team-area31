@@ -69,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(other.gameObject);
             bm.batteryCount++;
+            bm.recharge_battery();
         }
         else if (other.gameObject.CompareTag("Trap"))
         {
@@ -79,11 +80,6 @@ public class PlayerMovement : MonoBehaviour
         {
             health.health -= 30;
             StartCoroutine(FlashRed());
-        }
-        else if (other.gameObject.CompareTag("HealthReset"))
-        {
-            health.health = 100;
-            bm.batteryCount = 0;
         }
     }
 
