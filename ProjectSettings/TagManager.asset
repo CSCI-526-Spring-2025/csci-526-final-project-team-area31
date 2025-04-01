@@ -10,6 +10,7 @@ TagManager:
   - Tutorial
   - Monster
   - HealthReset
+  - Health
   layers:
   - Default
   - TransparentFX
