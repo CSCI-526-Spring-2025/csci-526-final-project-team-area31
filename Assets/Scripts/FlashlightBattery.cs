@@ -13,7 +13,7 @@ public class FlashlightBattery : MonoBehaviour
     public Light2D flashlight;  // Reference to the 2D Light
     public float maxBattery = 100f;  // Maximum battery life
     public float batteryLife;  // Current battery life
-    public float drainRate = 0.5f;  // Battery drain per second
+    public float drainRate = 0.1f;  // Battery drain per second
     public float offRechargeRate = 0.3f;
     public float minIntensity = 0.1f;  // Minimum light intensity
     public float maxIntensity = 0.5f;  // Max brightness
@@ -42,7 +42,7 @@ public class FlashlightBattery : MonoBehaviour
         }
 
         // Drain Battery if Flashlight is ON
-        if (isFlashlightOn && batteryLife > 0 && !isInBatteryRoom)
+        if (isFlashlightOn && batteryLife > 0)
         {
             batteryLife -= drainRate * Time.deltaTime;
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
@@ -50,7 +50,7 @@ public class FlashlightBattery : MonoBehaviour
             UpdateBatteryUI();
         }
 
-        else if (!isFlashlightOn && !isInBatteryRoom){
+        else if (!isFlashlightOn ){
             batteryLife = Mathf.Clamp(batteryLife + offRechargeRate , 0, maxBattery);
             float intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
             flashlight.intensity = intensity;
@@ -104,8 +104,8 @@ public class FlashlightBattery : MonoBehaviour
         {
             Debug.Log("Current in the tutorial Room");
             isInBatteryRoom = true;
-            flashlight.intensity = 1.0f;
-            batteryLife = maxBattery; // Reset to full battery instantly
+            //flashlight.intensity = 1.0f;
+            //batteryLife = maxBattery; // Reset to full battery instantly
             UpdateBatteryUI();
         }
     }

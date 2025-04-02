@@ -8,7 +8,7 @@ public class TutorialScript : MonoBehaviour
     private Health playerHealth;
     void Start()
     {
-        //StartCoroutine(ShowTutorial());
+        StartCoroutine(ShowTutorial());
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -16,7 +16,6 @@ public class TutorialScript : MonoBehaviour
         if (other.CompareTag("Player1")) 
         {
             Debug.Log("player is in tutorail so turn on the UI");
-            tutorialCanvas.SetActive(true); 
         }
     }
 
@@ -27,16 +26,15 @@ public class TutorialScript : MonoBehaviour
             playerHealth  = GameObject.FindObjectOfType<Health>();
             batteryManager1  = GameObject.FindObjectOfType<BatteryManager1>();
             playerHealth.health = 100;
-            batteryManager1.batteryCount = 0;
-            tutorialCanvas.SetActive(false); 
+            batteryManager1.batteryCount = 0; 
         }
     }
-    // IEnumerator ShowTutorial()
-    // {
-    //     tutorialCanvas.SetActive(true); 
-    //     yield return new WaitForSeconds(5f); 
-    //     tutorialCanvas.SetActive(false); 
-    // }
+    IEnumerator ShowTutorial()
+    {
+        tutorialCanvas.SetActive(true); 
+        yield return new WaitForSeconds(5f); 
+        tutorialCanvas.SetActive(false); 
+    }
 }
 
 
