@@ -25,7 +25,7 @@ public class DoorOpener : MonoBehaviour {
         if (doorOpened) return;
 
         doorOpened = true;
-        nextLevelGroundUI.SetActive(true);
+        //nextLevelGroundUI.SetActive(true);
         StartCoroutine(ShowNextLevel());
         if (cameraShake != null) {
             StartCoroutine(cameraShake.Shake(1f, 0.2f));

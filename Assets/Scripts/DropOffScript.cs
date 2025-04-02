@@ -24,7 +24,7 @@ public class DropOffScript : MonoBehaviour
             {
                 if (doorOpener != null)
                 {
-                    batteryManager1.batteryCount = 0;
+                    batteryManager1.batteryCount -= batteryneed;
                     doorOpener.OpenDoor();
                     Destroy(gameObject);
                 }
