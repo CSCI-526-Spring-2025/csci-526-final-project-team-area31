@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 using System.Collections;
+
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;  // Adjust speed in Inspector
@@ -18,6 +20,20 @@ public class PlayerMovement : MonoBehaviour
     public float flashDuration = 0.2f;
     private bool isDead = false;
 
+    // Google Apps Script Web App URL
+    [HideInInspector]
+    private string googleSheetURL = "https://script.google.com/macros/s/AKfycbwStmbKKdcFkriLE5gYMyARkJnaEmc9lFzvozkFeyWSwu-XrEB-VmykF5940WzY3zmdnA/exec";
+
+    [System.Serializable]
+    public class PlayerEncounterEvent
+    {
+        public string sessionId;
+        public string timestamp;
+        public string obstacleType;
+        public float health;
+        public Vector3 location;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,10 +46,10 @@ public class PlayerMovement : MonoBehaviour
         if (health.health <= 0)
         {
             isDead = true;
-            rb.linearVelocity = Vector2.zero; // Stop the player immediately
+            rb.linearVelocity = Vector2.zero;
             return;
         }
-        // Get movement input from Arrow Keys or WASD
+
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
@@ -50,11 +66,11 @@ public class PlayerMovement : MonoBehaviour
         // Countdown for the notification
         if (notificationTimer > 0f)
         {
-            notificationTimer -= Time.deltaTime;  // Decrease timer each frame
+            notificationTimer -= Time.deltaTime;
         }
         else
         {
-            notificationText.text = "";  // Clear the notification after 5 seconds
+            notificationText.text = "";
         }
 
         // Check if the player is near the starting point and has collected 3 batteries
@@ -85,12 +101,15 @@ public class PlayerMovement : MonoBehaviour
         {
             health.health -= 30;
             StartCoroutine(FlashRed());
+            StartCoroutine(SendEncounterEvent("trap"));
             CheckPlayerDeath();
         }
-        else if (other.gameObject.CompareTag("Health")){
-            if(health.health<100){
+        else if (other.gameObject.CompareTag("Health"))
+        {
+            if (health.health < 100)
+            {
                 Destroy(other.gameObject);
-                health.health =  ((health.health+50) < 100) ? health.health+50 : 100;
+                health.health = Mathf.Min(100, health.health + 50);
                 StartCoroutine(FlashGreen());
             }
         }
@@ -98,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
         {
             health.health -= 30;
             StartCoroutine(FlashRed());
+            StartCoroutine(SendEncounterEvent("monster"));
             CheckPlayerDeath();
         }
     }
@@ -115,16 +135,16 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         Debug.Log("3 seconds"); 
-        SceneManager.LoadScene("MazeScene_Level2"); 
+        SceneManager.LoadScene("MazeScene_Level2");
     }
 
     IEnumerator FlashRed()
     {
         if (damageOverlay != null)
         {
-            damageOverlay.color = new Color(1, 0, 0, 0.5f); // Red overlay (50% opacity)
+            damageOverlay.color = new Color(1, 0, 0, 0.5f);
             yield return new WaitForSeconds(flashDuration);
-            damageOverlay.color = new Color(1, 0, 0, 0); // Fade back to transparent
+            damageOverlay.color = new Color(1, 0, 0, 0);
         }
     }
 
@@ -132,9 +152,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (damageOverlay != null)
         {
-            damageOverlay.color = new Color(0, 1, 0, 0.5f); // Green overlay (50% opacity)
+            damageOverlay.color = new Color(0, 1, 0, 0.5f);
             yield return new WaitForSeconds(flashDuration);
-            damageOverlay.color = new Color(0, 1, 0, 0); // Fade back to transparent
+            damageOverlay.color = new Color(0, 1, 0, 0);
         }
     }
 
@@ -143,9 +163,41 @@ public class PlayerMovement : MonoBehaviour
         if (health.health <= 0)
         {
             isDead = true;
-            rb.linearVelocity = Vector2.zero; // Stop movement immediately
-            //notificationText.text = "YOU DIED!"; // Show death message
+            rb.linearVelocity = Vector2.zero;
         }
     }
 
+    IEnumerator SendEncounterEvent(string type)
+    {
+        PlayerEncounterEvent eventData = new PlayerEncounterEvent()
+        {
+            sessionId = PlayerPrefs.GetString("SessionID", "unknown"),
+            timestamp = System.DateTime.UtcNow.ToString("o"),
+            obstacleType = type,
+            health = health.health,
+            location = transform.position
+        };
+
+        string jsonData = JsonUtility.ToJson(eventData);
+        Debug.Log("Sending Encounter JSON: " + jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(googleSheetURL, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Accept", "*/*");
+
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Unity error: {request.error}, Response: {request.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.Log("Encounter logged successfully: " + request.downloadHandler.text);
+            }
+        }
+    }
 }
