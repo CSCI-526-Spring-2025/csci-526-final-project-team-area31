@@ -9,7 +9,7 @@ public class DropOffScript : MonoBehaviour
     public GameObject batteryUI;
     public TextMeshProUGUI batteryStatusText; // Reference to your text element
     public DoorOpener doorOpener; // Link this manually in the Inspector!
-
+    public int levelIndex;
     void Start()
     {
         batteryManager1 = GameObject.FindFirstObjectByType<BatteryManager1>();
@@ -27,6 +27,15 @@ public class DropOffScript : MonoBehaviour
                     batteryManager1.batteryCount -= batteryneed;
                     doorOpener.OpenDoor();
                     Destroy(gameObject);
+
+                    if (GameManager.Instance != null)
+                    {
+                        GameManager.Instance.SetCurrentRespawnPoint(levelIndex);
+                    }
+                    else
+                    {
+                        Debug.LogError("LevelTrigger: GameManager instance not found!");
+                    }
                 }
             }
             else

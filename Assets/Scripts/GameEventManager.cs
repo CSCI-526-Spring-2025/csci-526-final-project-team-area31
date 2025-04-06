@@ -55,10 +55,21 @@ public class GameEventManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
-
+        if (GameManager.Instance != null)
+            {
+                GameManager.respawnTargetLevelIndex = GameManager.Instance.GetCurrentLevelIndex();
+                Debug.Log($"Storing target level index for post-reload respawn: {GameManager.respawnTargetLevelIndex}");
+            }
+            else
+            {
+                GameManager.respawnTargetLevelIndex = -1; // Set to invalid if no GameManager found
+                Debug.LogWarning("GameManager instance not found before reload. Cannot store target respawn index.");
+            }
         StartCoroutine(SendRestartEvent());
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+
+        
     }
 
     IEnumerator SendRestartEvent()
@@ -85,6 +96,6 @@ public class GameEventManager : MonoBehaviour
                 Debug.Log("Restart Event Logged Successfully.");
         }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
