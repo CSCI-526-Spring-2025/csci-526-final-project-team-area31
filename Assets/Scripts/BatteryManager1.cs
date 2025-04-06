@@ -47,7 +47,7 @@ public class BatteryManager1 : MonoBehaviour
         if (flashlight != null)
         {
             Debug.Log("FlashlightBattery script found! Recharging...");
-            flashlight.RechargeBattery(rechargeAmount);
+            flashlight.RechargeBattery();
             Debug.Log("Battery recharged by " + rechargeAmount + ". Current battery: " + flashlight.batteryLife);
             //Destroy(gameObject);  // Remove the battery item after pickup
         }

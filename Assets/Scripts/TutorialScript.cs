@@ -25,7 +25,9 @@ public class TutorialScript : MonoBehaviour
         {
             playerHealth  = GameObject.FindObjectOfType<Health>();
             batteryManager1  = GameObject.FindObjectOfType<BatteryManager1>();
+            FlashlightBattery flashlight = GameObject.FindObjectOfType<FlashlightBattery>();
             playerHealth.health = 100;
+            flashlight.batteryLife = 100;
             batteryManager1.batteryCount = 0; 
         }
     }

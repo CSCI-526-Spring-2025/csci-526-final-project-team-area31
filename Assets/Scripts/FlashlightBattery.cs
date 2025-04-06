@@ -92,12 +92,13 @@ public class FlashlightBattery : MonoBehaviour
     }
 
     // Function to recharge the battery
-    public void RechargeBattery(float amount)
+    public void RechargeBattery()
     {
         if (batteryLife <= 0){
             batteryLife = 0;
         }
-        batteryLife = Mathf.Clamp(batteryLife + amount, 0, maxBattery);
+        batteryLife = Mathf.Clamp(batteryLife + 80f, 0, maxBattery);
+        flashlight.intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
         flashlight.enabled = true;
         flashlight.pointLightOuterRadius = 4.0f;
         UpdateBatteryUI();
