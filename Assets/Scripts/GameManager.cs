@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections;
 
 
 public class GameManager : MonoBehaviour
@@ -6,7 +8,17 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public Transform[] respawnPoints;
-    
+
+    [System.Serializable]
+    public class BatteryDoorEvent
+    {
+        public string sessionId;
+        public string timestamp;
+        public string eventType; // "battery" or "door"
+        public int currentBatteryCount;
+        public int doorRequirement;
+        public int levelIndex;
+    }
 
     // public GameObject playerPrefab;
     public Transform playerInstance; 
@@ -146,6 +158,49 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Player teleported to {targetPoint.position}");
     }
 
+    public void LogDoorOpened(int currentBatteryCount, int requiredBatteries)
+    {
+        StartCoroutine(SendBatteryDoorEvent("door", currentBatteryCount, requiredBatteries));
+    }
 
+    public void LogBatteryPickup(int currentBatteryCount)
+    {
+        StartCoroutine(SendBatteryDoorEvent("battery", currentBatteryCount));
+    }
 
+    public IEnumerator SendBatteryDoorEvent(string eventType, int currentCount, int requiredForDoor = 0)
+    {
+        BatteryDoorEvent evt = new BatteryDoorEvent
+        {
+            sessionId = PlayerPrefs.GetString("SessionID", "unknown"),
+            timestamp = System.DateTime.UtcNow.ToString("o"),
+            eventType = eventType,
+            currentBatteryCount = currentCount,
+            doorRequirement = eventType == "door" ? requiredForDoor : 0,
+            levelIndex = this.currentLevelIndex  // Add level tracking
+        };
+
+        string json = JsonUtility.ToJson(evt);
+        Debug.Log("Sending Battery/Door Event: " + json);
+
+        using (UnityWebRequest request = new UnityWebRequest("https://script.google.com/macros/s/AKfycbyui_TN1ovzee8yq0UgdbFNpgozIgNLfAs8--khiXkKuixLbY1lebKzHHelgCBux9DOxw/exec", "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Accept", "*/*");
+
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Battery/Door event failed: " + request.error);
+            }
+            else
+            {
+                Debug.Log("Battery/Door event logged: " + request.downloadHandler.text);
+            }
+        }
+    }
 }
