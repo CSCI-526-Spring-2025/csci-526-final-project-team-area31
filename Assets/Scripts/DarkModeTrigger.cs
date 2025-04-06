@@ -15,8 +15,8 @@ public class DarkModeTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player1"))
         {
-            battery.batteryLife = 0;
-            Debug.Log("Darkzone tirgger ");
+            battery.batteryLife = 10;
+            Debug.Log("Darkzone trigger ");
             darkModeTutorial.SetActive(true); 
         }
 
