@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
         string json = JsonUtility.ToJson(evt);
         Debug.Log("Sending Battery/Door Event: " + json);
 
-        using (UnityWebRequest request = new UnityWebRequest("https://script.google.com/macros/s/AKfycbyui_TN1ovzee8yq0UgdbFNpgozIgNLfAs8--khiXkKuixLbY1lebKzHHelgCBux9DOxw/exec", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest("https://script.google.com/macros/s/AKfycbxRImDqK3B5Ijqo0aK-wnyPI1o5f2uYKnknk0DmxwUcEk4WRUsJ4-Dv4qQkKwgdzloYcw/exec", "POST"))
         {
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
