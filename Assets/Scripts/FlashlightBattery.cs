@@ -10,7 +10,7 @@ public class FlashlightBattery : MonoBehaviour
     public Light2D flashlight;
     public float maxBattery = 100f;
     public float batteryLife;
-    public float drainRate = 0.1f;
+    public float drainRate = 0.05f;
     public float offRechargeRate = 0.3f;
     public float minIntensity = 0.1f;
     public float maxIntensity = 0.5f;
