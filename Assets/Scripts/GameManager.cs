@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using TMPro;
 
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-
+    public TextMeshProUGUI FtoggleText;
     public Transform[] respawnPoints;
 
     [System.Serializable]

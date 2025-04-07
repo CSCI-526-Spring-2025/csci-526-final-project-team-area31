@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isPromptedToReturn = false;
     private float notificationTimer = 0f;  // Timer to control the duration of the notification
     public Image damageOverlay;
-    public float flashDuration = 0.2f;
+    public float flashDuration = 0.03f;
     private bool isDead = false;
 
     // Google Apps Script Web App URL
@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         if (damageOverlay != null)
         {
             damageOverlay.color = new Color(1, 0, 0, 0.5f);
-            yield return new WaitForSeconds(flashDuration);
+            yield return new WaitForSeconds(0.2f);
             damageOverlay.color = new Color(1, 0, 0, 0);
         }
     }
@@ -158,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         if (damageOverlay != null)
         {
             damageOverlay.color = new Color(0, 1, 0, 0.5f);
-            yield return new WaitForSeconds(flashDuration);
+            yield return new WaitForSeconds(0.2f);
             damageOverlay.color = new Color(0, 1, 0, 0);
         }
     }
