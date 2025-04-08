@@ -51,13 +51,13 @@ public class FlashlightBattery : MonoBehaviour
             StartCoroutine(SendFlashlightToggleEvent(isFlashlightOn));
         }
 
-        if (isFlashlightOn && batteryLife > 0 && !isInBatteryRoom)
+        if (isFlashlightOn && batteryLife > 0)
         {
             batteryLife -= drainRate * Time.deltaTime;
             flashlight.intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
             UpdateBatteryUI();
         }
-        else if (!isFlashlightOn && !isInBatteryRoom)
+        else if (!isFlashlightOn )
         {
             batteryLife = Mathf.Clamp(batteryLife + offRechargeRate, 0, maxBattery);
             flashlight.intensity = Mathf.Lerp(minIntensity, maxIntensity, batteryLife / maxBattery);
