@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FloorTileScratched2_diffuse_0: -1138942151013830345
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
