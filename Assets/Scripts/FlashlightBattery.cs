@@ -14,9 +14,10 @@ public class FlashlightBattery : MonoBehaviour
     public float offRechargeRate = 0.3f;
     public float minIntensity = 0.1f;
     public float maxIntensity = 0.5f;
+    public BatteryManager1 bm;
     private bool isInBatteryRoom = true;
     private bool isFlashlightOn = true;
-
+    
     // BatteryBar UI elements
     public Image BatteryBar;
     public float Width, Height;
@@ -84,9 +85,10 @@ public class FlashlightBattery : MonoBehaviour
         }
         else
         {
-            flashlight.pointLightOuterRadius = 24.11164f;
-            flashlight.pointLightInnerAngle = 80f;
-            flashlight.pointLightOuterAngle = 120f;
+            // flashlight.pointLightOuterRadius = 24.11164f;
+            // flashlight.pointLightInnerAngle = 80f;
+            // flashlight.pointLightOuterAngle = 120f;
+            UpdateBatteryUpgrade();
         }
 
     }
@@ -130,6 +132,15 @@ public class FlashlightBattery : MonoBehaviour
         float newWidth = (batteryLife / maxBattery) * Width;
 
         battery_.sizeDelta = new Vector2(newWidth, Height);
+
+        UpdateBatteryUpgrade();
+    }
+
+
+    void UpdateBatteryUpgrade(){
+        flashlight.pointLightOuterRadius = 24.11164f + (float)bm.batteryCount;
+        flashlight.pointLightInnerAngle = 80f + 8f * (float)bm.batteryCount;
+        flashlight.pointLightOuterAngle = 120f + 12f * (float)bm.batteryCount;
     }
 
     IEnumerator SendFlashlightToggleEvent(bool isFlashlightOn)
