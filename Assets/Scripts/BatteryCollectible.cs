@@ -7,7 +7,7 @@ public class BatteryCollectible : MonoBehaviour
         if (other.CompareTag("Player")) // If the player touches the battery
         {
             BatteryManager.Instance.CollectBattery(); // Add battery to the counter
-            // Destroy(gameObject); // Remove the battery from the scene
+            Debug.Log("battery collected");
         }
     }
 }
