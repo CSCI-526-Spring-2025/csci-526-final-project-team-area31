@@ -35,7 +35,7 @@ public class DropOffScript : MonoBehaviour
 
     void Update()
     {
-        if (!arrowShown && batteryManager1 != null && batteryManager1.batteryCount >= batteryneed)
+        if (!arrowShown && batteryManager1 != null && batteryManager1.batteryCount >= batteryneed && gameObject.activeSelf)
         {
             if (arrowPointer != null && exitDoor != null)
             {
@@ -44,6 +44,7 @@ public class DropOffScript : MonoBehaviour
             }
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
