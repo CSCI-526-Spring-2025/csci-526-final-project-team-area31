@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      png-footprint-copy-feet-foot-footprint-footprints-log-logs-prints-512_0: 3641859087942860088
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
