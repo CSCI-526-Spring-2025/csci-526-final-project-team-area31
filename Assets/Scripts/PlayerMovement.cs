@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     public Image damageOverlay;
     public float flashDuration = 0.03f;
     private bool isDead = false;
+    private Animator animator;
+    private Vector2 lastMoveDir = Vector2.down;
 
     // Google Apps Script Web App URL
     [HideInInspector]
@@ -39,10 +41,12 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         initialPosition = transform.position;
         notificationText.text = "";
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
+
         if (health.health <= 0)
         {
             isDead = true;
@@ -78,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
         {
             FinishGame();
         }
+
     }
 
     void FixedUpdate()
