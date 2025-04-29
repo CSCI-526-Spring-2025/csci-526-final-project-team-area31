@@ -14,7 +14,9 @@ public class DropOffScript : MonoBehaviour
     public int levelIndex;
 
     public ArrowPointer arrowPointer;
-    public Transform exitDoor; // where the arrow should point
+    public Transform exitDoor;
+    public Transform[] nextlevel;
+    public int[] batteryreq;
     private bool arrowShown = false;
 
     void Start()
@@ -34,11 +36,16 @@ public class DropOffScript : MonoBehaviour
     }
 
     void Update()
-    {
+    {   if(GameManager.Instance!=null){
+            batteryneed = batteryreq[GameManager.Instance.currentLevelIndex];
+        }
         if (!arrowShown && batteryManager1 != null && batteryManager1.batteryCount >= batteryneed && gameObject.activeSelf)
         {
+            
+            exitDoor = nextlevel[GameManager.Instance.currentLevelIndex];
             if (arrowPointer != null && exitDoor != null)
             {
+                
                 arrowPointer.ShowArrow(exitDoor);
                 arrowShown = true;
             }

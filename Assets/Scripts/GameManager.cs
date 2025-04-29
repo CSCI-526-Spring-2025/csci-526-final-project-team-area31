@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public Transform playerInstance; 
     private Transform currentRespawnPoint; 
     public static int respawnTargetLevelIndex = -1;
-    private int currentLevelIndex = 0;
+    public int currentLevelIndex = 0;
     void Awake()
     {
 
